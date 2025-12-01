@@ -1,105 +1,79 @@
-:root{
-  --accent:#ffb703;
-  --card-bg: rgba(255,255,255,0.82);
-  --text:#1f1f23;
-  --max-width:720px;
+body {
+margin: 0;
+padding: 0;
+font-family: 'Montserrat', sans-serif;
+color: #333;
+overflow-x: hidden;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%;}
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-  color:var(--text);
-  background:#111;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:32px;
+
+.bg-image {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image: url('background.jpg'); /* Hier das Brautpaar-Bild einfügen */
+background-size: cover;
+background-position: center;
+filter: brightness(0.65);
+z-index: -2;
 }
 
-.bg{
-  position:fixed;
-  inset:0;
-  background-image:url('background.jpg');
-  background-size:cover;
-  background-position:center;
-  z-index:0;
-  filter:grayscale(5%) contrast(90%);
-  transform:scale(1.02);
+
+.overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+backdrop-filter: blur(6px);
+background: rgba(255, 255, 255, 0.2);
+z-index: -1;
 }
 
-.bg::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.32));
-  mix-blend-mode:multiply;
+
+.card {
+max-width: 650px;
+margin: 60px auto;
+padding: 40px 50px;
+background: rgba(255, 255, 255, 0.65);
+border-radius: 18px;
+box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+backdrop-filter: blur(8px);
+animation: slide-up 1s ease forwards;
 }
 
-.card{
-  position:relative;
-  z-index:2;
-  width:100%;
-  max-width:var(--max-width);
-  background:var(--card-bg);
-  border-radius:16px;
-  padding:28px;
-  box-shadow:0 8px 30px rgba(2,6,23,0.45);
-  backdrop-filter: blur(6px) saturate(120%);
-  border:1px solid rgba(255,255,255,0.32);
+
+h1 {
+font-family: 'Playfair Display', serif;
+font-size: 2.4rem;
+margin-top: 0;
 }
 
-header{display:flex;gap:16px;align-items:center}
-.avatar{
-  width:64px;height:64px;border-radius:12px;flex:0 0 64px;overflow:hidden;
-  background:linear-gradient(135deg,var(--accent),#ff7b7b);
-  display:grid;place-items:center;color:white;font-weight:700;font-size:18px;
+
+.payment-box {
+background: rgba(255, 255, 255, 0.75);
+border-radius: 12px;
+padding: 20px;
+margin: 20px 0;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-h1{font-size:20px;margin:0 0 6px}
-p.lead{margin:0 0 18px;font-weight:600;color:#2b2b33}
 
-main p{margin:0 0 14px;line-height:1.5}
-
-.meta{
-  margin-top:14px;
-  padding:14px;
-  border-radius:10px;
-  background:rgba(255,255,255,0.6);
-  border:1px solid rgba(0,0,0,0.04);
+.thanks {
+font-style: italic;
+font-weight: 500;
 }
 
-.iban{
-  font-family:monospace;
-  background:rgba(0,0,0,0.03);
-  padding:10px;
-  border-radius:8px;
-  display:inline-block;
+
+@keyframes slide-up {
+from {
+transform: translateY(20px);
+opacity: 0;
 }
-
-.cta{
-  display:inline-block;
-  margin-top:18px;
-  padding:10px 16px;
-  border-radius:10px;
-  background:var(--accent);
-  color:#111;
-  font-weight:700;
-  text-decoration:none;
-  box-shadow:0 6px 18px rgba(255,183,3,0.18);
+to {
+transform: translateY(0);
+opacity: 1;
 }
-
-footer{margin-top:18px;font-size:13px;color:#4a4a55}
-
-.placeholder{
-  background:rgba(255,183,3,0.12);
-  padding:2px 6px;
-  border-radius:6px;
-}
-
-@media(max-width:520px){
-  .card{padding:20px;border-radius:14px}
-  h1{font-size:18px}
-  .avatar{width:56px;height:56px}
 }
