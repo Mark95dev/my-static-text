@@ -1,20 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Mein Text</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zimmerreservierung — Hochzeit</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <pre>
-Hey [Name] 😊,
+  <div class="bg" aria-hidden="true"></div>
 
-für die Hochzeit nächstes Jahr möchten wir schon jetzt die Hotelzimmer fix machen. Dein Zimmer kostet [Betrag] €.
-Wenn du dabei bist, überweise den Betrag bitte bis [Datum] an:
+  <article class="card" role="main">
+    <header>
+      <div class="avatar">💛</div>
+      <div>
+        <h1>Hey <span class="placeholder">[Name]</span> 😊,</h1>
+        <p class="lead">Kurze Info zur Zimmerreservierung</p>
+      </div>
+    </header>
 
-IBAN: [DE00 0000 0000 0000 0000 00]
-Verwendungszweck: Hochzeit – Zimmerreservierung [Dein Name]
+    <main>
+      <p>für die Hochzeit nächstes Jahr möchten wir schon jetzt die Hotelzimmer fix machen. Dein Zimmer kostet <strong><span class="placeholder">[Betrag]</span> €</strong>.</p>
 
-Danke dir! Wir freuen uns mega, dass du mit uns feiern wirst! 🎉💛
-  </pre>
+      <p>Wenn du dabei bist, überweise den Betrag bitte bis <strong><span class="placeholder">[Datum]</span></strong> an:</p>
+
+      <div class="meta">
+        <div style="margin-bottom:8px;font-size:14px;font-weight:600">Zahlungsdaten</div>
+        <div class="iban">IBAN: <strong>[DE00 0000 0000 0000 0000 00]</strong></div>
+        <div style="margin-top:8px">Verwendungszweck: <span class="placeholder">Hochzeit – Zimmerreservierung [Dein Name]</span></div>
+      </div>
+
+      <p>Danke dir! Wir freuen uns mega, dass du mit uns feiern wirst! 🎉💛</p>
+
+      <a class="cta" href="#" onclick="navigator.clipboard && navigator.clipboard.writeText(document.querySelector('.iban').innerText).then(()=>{alert('IBAN kopiert')}).catch(()=>{alert('Kopieren nicht möglich')});return false;">IBAN kopieren</a>
+
+      <footer>
+        <p>Bei Fragen antworte einfach kurz auf diese Nachricht.</p>
+      </footer>
+    </main>
+  </article>
 </body>
 </html>
