@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (userName) {
-    document.getElementById('greeting').textContent = 'Hey ' + userName + ' 😊';
     document.getElementById('purpose').textContent = 'Hochzeit – Zimmerreservierung ' + userName;
   }
 
