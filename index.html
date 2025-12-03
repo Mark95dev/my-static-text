@@ -1,34 +1,56 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Hochzeit – Zimmerreservierung</title>
-	<link rel="stylesheet" href="styles.css" />
-	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hochzeit – Zimmerreservierung</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-	<div class="bg-image"></div>
-	<div class="overlay"></div>
 
-	<main class="card fade-in">
-		<h1>Hey 😊</h1>
-		<p>
-		für die Hochzeit nächstes Jahr möchten wir schon jetzt die Hotelzimmer fix machen.<br>
-		Dein Zimmer kostet <strong>[Betrag] €</strong>.<br><br>
-		Wenn du dabei bist, überweise den Betrag bitte bis <strong>[Datum]</strong> an:
-		</p>
+  <div class="bg-image"></div>
+  <div class="overlay"></div>
 
-		<div class="payment-box">
-			<p><strong>IBAN:</strong> [DE00 0000 0000 0000 0000 00]</p>
-			<p><strong>Verwendungszweck:</strong><br>Hochzeit – Zimmerreservierung [Dein Name]</p>
-		</div>
+  <main class="card fade-in">
+    <h1 id="greeting">Liebe Hochzeitsgäste, 😊</h1>
+	
+    <p>
+		leider gab es bei dem QR Code auf den Einladungskarten einen technischen Fehler.
+		Damit wir gemeinsam bis in die frühen Morgenstunden ausgelassen feiern und tanzen können, haben wir für dich/euch ein Zimmer direkt in unserer wunderschönen Location gebucht. 
+		Du/Ihr musst/müsst dir/euch keine Sorgen um den Heimweg machen, sondern du/ihr kannst/könnt nach der Party direkt ins Bett fallen. 
+	</p>
+	<p>	
+		Die Kosten für dieses Rundum-sorglos-Paket betragen <strong>115 € pro Person</strong>.
+		Darin enthalten ist die Übernachtung sowie ein herrliches gemeinsames Frühstück am nächsten Morgen! 
+		Für unsere Gäste unter 7 Jahren ist die Übernachtung selbstverständlich kostenfrei.
+	</p>	
+	<p>
+		Wir bitten dich/euch den Betrag für dein/euer Zimmer auf das folgende Konto zu überweisen: 
 
+    </p>
 
-		<p class="thanks">Danke dir! Wir freuen uns mega, dass du mit uns feiern wirst! 🎉💛</p>
-	</main>
+    <div class="payment-box">
+      <div class="copy-field">
+        <p><strong>IBAN:</strong> <span id="iban">DE76 1708 0000 0198 2400 00</span></p>
+        <button class="copy-btn" data-copy-target="iban">IBAN kopieren</button>
+      </div>
 
-	<script src="script.js"></script>
+      <div class="copy-field">
+        <p><strong>Verwendungszweck:</strong><br>
+        <span id="purpose">Hochzeit – Zimmerreservierung</span></p>
+        <button class="copy-btn" data-copy-target="purpose">Verwendungszweck kopieren</button>
+      </div>
+
+      <span class="copy-feedback">Kopiert!</span>
+    </div>
+
+    <p id="countdown" class="thanks"></p>
+
+    <p class="thanks">Wir freuen uns auf dich/euch</p>
+	  <p class="thanks">Euer Hochzeitspaar 💛</p>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
