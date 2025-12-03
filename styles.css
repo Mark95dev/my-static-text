@@ -1,147 +1,207 @@
 body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Montserrat', sans-serif;
-	color: #333;
-	overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  color: #333;
+  overflow-x: hidden;
 }
 
-
+/* -----------------------------
+   Hintergrund & Overlay
+----------------------------- */
 .bg-image {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-image: url('background.jpg');
-	background-size: cover;
-	background-position: center;
-	filter: brightness(0.65);
-	z-index: -2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('background.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.75);
+  z-index: -2;
 }
-
 
 .overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	backdrop-filter: blur(6px);
-	background: rgba(255, 255, 255, 0.2);
-	z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(7px);
+  background: rgba(255, 255, 255, 0.28);
+  z-index: -1;
 }
 
-
+/* -----------------------------
+   Karte (Main-Container)
+----------------------------- */
 .card {
-	max-width: 650px;
-	margin: 60px auto;
-	padding: 40px 50px;
-	background: rgba(255, 255, 255, 0.65);
-	border-radius: 18px;
-	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-	backdrop-filter: blur(8px);
-	animation: slide-up 1s ease forwards;
-}
+  max-width: 650px;
+  margin: 60px auto;
+  transform: translateX(-300px);
+  padding: 40px 50px;
 
+  /* zartes Sommer-Design */
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(10px);
+  border-left: 6px solid #A7D3F3; /* Soft Blue Akzent */
+
+  animation: slide-up 1s ease forwards;
+}
 
 h1 {
-	font-family: 'Playfair Display', serif;
-	font-size: 2.4rem;
-	margin-top: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  margin-top: 0;
+  color: #A26A5E; /* dezentes warmes Coral-Braun */
 }
 
-
+/* -----------------------------
+   IBAN Box
+----------------------------- */
 .payment-box {
-	background: rgba(255, 255, 255, 0.75);
-	border-radius: 12px;
-	padding: 20px;
-	margin: 20px 0;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  position: relative;
+  border: 1px solid rgba(167, 211, 243, 0.4); /* Soft Blue */
 }
 
+/* -----------------------------
+   Buttons (Sommer-Pastell)
+----------------------------- */
+.copy-btn {
+  margin-top: 5px;
+  cursor: pointer;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 22px;
 
+  background: linear-gradient(45deg, #A7D3F3, #F7B6A8); /* Soft Blue → Light Coral */
+  color: #fff;
+  font-weight: 500;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.copy-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(167, 211, 243, 0.4);
+}
+
+.copy-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(247, 182, 168, 0.4);
+}
+
+.copy-feedback {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: -25px;
+  background: #A7D3F3;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(167, 211, 243, 0.3);
+}
+
+/* -----------------------------
+   Countdown – rechts unten
+----------------------------- */
+#countdown {
+  position: fixed;
+  right: 25px;
+  bottom: 20px;
+
+  background: rgba(255, 255, 255, 0.75);
+  padding: 12px 18px;
+  border-radius: 14px;
+
+  font-size: 1rem;
+  font-weight: 600;
+  font-style: italic;
+
+  border: 1px solid rgba(247, 182, 168, 0.5); /* Light Coral */
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+
+  backdrop-filter: blur(8px);
+  color: #A26A5E; /* elegantes warmes Coral-Braun */
+  z-index: 999;
+}
+
+/* -----------------------------
+   Danke-Texte
+----------------------------- */
 .thanks {
-	font-style: italic;
-	font-weight: 500;
+  font-style: italic;
+  font-weight: 500;
+  color: #A26A5E;
 }
 
-
-@keyframes slide-up {
-	from {
-		transform: translateY(20px);
-		opacity: 0;
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-}
-
-
-/* Herz-Animation */
+/* -----------------------------
+   Heart Animation
+----------------------------- */
 .heart {
-	position: fixed;
-	width: 15px;
-	height: 15px;
-	background: #ff6b81;
-	transform: rotate(45deg);
-	z-index: 9999;
-	pointer-events: none;
-	animation-name: floatUp;
-	animation-timing-function: ease-out;
+  position: fixed;
+  width: 15px;
+  height: 15px;
+  background: #F7B6A8;
+  transform: rotate(45deg);
+  z-index: 9999;
+  pointer-events: none;
+  animation-name: floatUp;
+  animation-timing-function: ease-out;
 }
+
 .heart::before, .heart::after {
-	content: '';
-	position: absolute;
-	width: 15px;
-	height: 15px;
-	background: #ff6b81;
-	border-radius: 50%;
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: #F7B6A8;
+  border-radius: 50%;
 }
-.heart::before {
-	top: -7.5px;
-	left: 0;
-}
-.heart::after {
-	top: 0;
-	left: -7.5px;
-}
+
+.heart::before { top: -7.5px; left: 0; }
+.heart::after  { top: 0; left: -7.5px; }
+
 @keyframes floatUp {
-	0% {
-		transform: translate(0, 0) rotate(45deg);
-		opacity: 1;
-	}
-	100% {
-		transform: translate(var(--x), var(--y)) rotate(45deg);
-		opacity: 0;
-	}
+  0% { transform: translate(0,0) rotate(45deg); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) rotate(45deg); opacity: 0; }
 }
 
-/* Responsive Design */
+/* -----------------------------
+   Responsive
+----------------------------- */
 @media (max-width: 768px) {
-	.card {
-		margin: 40px 20px;
-		padding: 30px 25px;
-	}
-	h1 {
-		font-size: 2rem;
-	}
-	.payment-box {
-		padding: 15px;
-	}
-}
+  .card {
+    margin: 40px 20px;
+    padding: 30px 25px;
+    transform: translateX(0); /* nicht aus dem Bildschirm schieben */
+  }
 
+  #countdown {
+    right: 15px;
+    bottom: 15px;
+    font-size: 0.9rem;
+  }
+
+  h1 { font-size: 2rem; }
+}
 
 @media (max-width: 480px) {
-	.card {
-		margin: 30px 15px;
-		padding: 25px 20px;
-	}
-	h1 {
-		font-size: 1.6rem;
-	}
-	.payment-box {
-		padding: 12px;
-	}
+  .card {
+    margin: 30px 15px;
+    padding: 25px 20px;
+  }
+
+  h1 { font-size: 1.6rem; }
 }
