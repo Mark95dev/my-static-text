@@ -2,101 +2,82 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Montserrat', sans-serif;
-  color: #333;
+  color: #2b2b2b;
   overflow-x: hidden;
-}
 
-/* -----------------------------
-   Hintergrund & Overlay
------------------------------ */
-.bg-image {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('background.jpg');
-  background-size: cover;
-  background-position: center;
-  filter: brightness(0.75);
-  z-index: -2;
+  background: linear-gradient(
+    135deg,
+    #FFF4E6 0%,
+    #FFE0D3 35%,
+    #FFD5E1 70%,
+    #D7ECFA 100%
+  );
 }
 
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(7px);
-  background: rgba(255, 255, 255, 0.28);
+  inset: 0;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.12);
   z-index: -1;
 }
 
-/* -----------------------------
-   Karte (Main-Container)
------------------------------ */
 .card {
   max-width: 650px;
   margin: 60px auto;
-  transform: translateX(-300px);
   padding: 40px 50px;
 
-  /* zartes Sommer-Design */
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(10px);
-  border-left: 6px solid #A7D3F3; /* Soft Blue Akzent */
+  background: 
+    linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+    url("background.jpg") center/cover no-repeat;
+  background-position: center calc(50% + 0px);
+  border-radius: 22px;
+  border-left: 6px solid #A7D3F3;
+
+  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+  backdrop-filter: blur(8px);
 
   animation: slide-up 1s ease forwards;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
   font-family: 'Playfair Display', serif;
   font-size: 2.4rem;
   margin-top: 0;
-  color: #A26A5E; /* dezentes warmes Coral-Braun */
+  color: #b05c50;  /* warm coral brown */
 }
 
-/* -----------------------------
-   IBAN Box
------------------------------ */
 .payment-box {
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 14px;
   padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-  position: relative;
-  border: 1px solid rgba(167, 211, 243, 0.4); /* Soft Blue */
+  margin: 25px 0;
+  border: 1px solid rgba(167, 211, 243, 0.4);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* -----------------------------
-   Buttons (Sommer-Pastell)
------------------------------ */
 .copy-btn {
   margin-top: 5px;
   cursor: pointer;
-  padding: 8px 14px;
+  padding: 8px 15px;
   border: none;
   border-radius: 22px;
-
-  background: linear-gradient(45deg, #A7D3F3, #F7B6A8); /* Soft Blue → Light Coral */
-  color: #fff;
   font-weight: 500;
+  color: #fff;
 
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(45deg, #A7D3F3, #F7B6A8);
+
+  transition: transform .2s, box-shadow .2s;
 }
 
 .copy-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 14px rgba(167, 211, 243, 0.4);
-}
-
-.copy-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 3px 8px rgba(247, 182, 168, 0.4);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
 .copy-feedback {
@@ -109,46 +90,13 @@ h1 {
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 0.8rem;
-  font-weight: 500;
-  box-shadow: 0 2px 6px rgba(167, 211, 243, 0.3);
 }
 
-/* -----------------------------
-   Countdown – rechts unten
------------------------------ */
-#countdown {
-  position: fixed;
-  right: 25px;
-  bottom: 20px;
-
-  background: rgba(255, 255, 255, 0.75);
-  padding: 12px 18px;
-  border-radius: 14px;
-
-  font-size: 1rem;
-  font-weight: 600;
-  font-style: italic;
-
-  border: 1px solid rgba(247, 182, 168, 0.5); /* Light Coral */
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-
-  backdrop-filter: blur(8px);
-  color: #A26A5E; /* elegantes warmes Coral-Braun */
-  z-index: 999;
-}
-
-/* -----------------------------
-   Danke-Texte
------------------------------ */
 .thanks {
   font-style: italic;
-  font-weight: 500;
-  color: #A26A5E;
+  color: #b05c50;
 }
 
-/* -----------------------------
-   Heart Animation
------------------------------ */
 .heart {
   position: fixed;
   width: 15px;
@@ -174,24 +122,14 @@ h1 {
 .heart::after  { top: 0; left: -7.5px; }
 
 @keyframes floatUp {
-  0% { transform: translate(0,0) rotate(45deg); opacity: 1; }
+  0%   { transform: translate(0,0) rotate(45deg); opacity: 1; }
   100% { transform: translate(var(--x), var(--y)) rotate(45deg); opacity: 0; }
 }
 
-/* -----------------------------
-   Responsive
------------------------------ */
 @media (max-width: 768px) {
   .card {
-    margin: 40px 20px;
-    padding: 30px 25px;
-    transform: translateX(0); /* nicht aus dem Bildschirm schieben */
-  }
-
-  #countdown {
-    right: 15px;
-    bottom: 15px;
-    font-size: 0.9rem;
+    margin: 40px 18px;
+    padding: 32px 26px;
   }
 
   h1 { font-size: 2rem; }
@@ -199,9 +137,9 @@ h1 {
 
 @media (max-width: 480px) {
   .card {
-    margin: 30px 15px;
-    padding: 25px 20px;
+    margin: 28px 15px;
+    padding: 26px 20px;
   }
 
-  h1 { font-size: 1.6rem; }
+  h1 { font-size: 1.7rem; }
 }

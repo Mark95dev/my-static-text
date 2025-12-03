@@ -50,23 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('purpose').textContent = 'Hochzeit – Zimmerreservierung ' + userName;
   }
 
-
-  /* -----------------------------
-   * Countdown
-   * ----------------------------- */
-  const countdownEl = document.getElementById('countdown');
-  const reservationDate = new Date('2026-07-19');
-
-  function updateCountdown() {
-    const now = new Date();
-    const diff = Math.ceil((reservationDate - now) / (1000 * 60 * 60 * 24));
-    countdownEl.textContent = `Noch ${diff} Tage bis zur Hochzeit!`;
-  }
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000 * 60 * 60);
-
-
   /* -----------------------------
    * Copy-to-Clipboard
    * ----------------------------- */
