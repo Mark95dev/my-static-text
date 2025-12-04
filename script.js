@@ -20,7 +20,7 @@
 
         // Game-Konstanten
         const GRAVITY = 0.6;
-        const LIFT = -9.5;
+        const LIFT = -12;
         // ANPASSUNG: Reduzierung der Geschwindigkeit von 3 auf 2.5 für besseres mobiles Spielgefühl
         const PIPE_SPEED = 2.5; 
         const GAP_SIZE = 170; 
