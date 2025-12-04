@@ -1,145 +1,179 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Montserrat', sans-serif;
-  color: #2b2b2b;
-  overflow-x: hidden;
-
-  background: linear-gradient(
-    135deg,
-    #FFF4E6 0%,
-    #FFE0D3 35%,
-    #FFD5E1 70%,
-    #D7ECFA 100%
-  );
+/* Basis */
+:root {
+    /* Verbesserte Farbdirektiven mit Variablen */
+    --color-text-dark: #111111;
+    --color-primary-accent: #A7D3F3; /* Hellblau */
+    --color-secondary-accent: #F7B6A8; /* Lachsrosa */
+    --color-heading: #974f44;
 }
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  backdrop-filter: blur(6px);
-  background: rgba(255, 255, 255, 0.12);
-  z-index: -1;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-text-dark);
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #FFF4E6 0%, #FFE0D3 35%, #FFD5E1 70%, #D7ECFA 100%);
 }
 
 .card {
-  max-width: 650px;
-  margin: 60px auto;
-  padding: 40px 50px;
-
-  background: 
-    linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
-    url("background2.jpg") center/cover no-repeat;
-  background-position: center calc(50% + 0px);
-  border-radius: 22px;
-  border-left: 6px solid #A7D3F3;
-
-  box-shadow: 0 12px 35px rgba(0,0,0,0.15);
-  backdrop-filter: blur(8px);
-
-  animation: slide-up 1s ease forwards;
+    max-width: 650px;
+    margin: 60px auto;
+    padding: 40px 50px;
+    /* Hinweis: "background2.jpg" wird hier verwendet. */
+    background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url("background2.jpg") center/cover no-repeat;
+    border-radius: 22px;
+    border-left: 6px solid var(--color-primary-accent);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    backdrop-filter: blur(8px);
+    animation: slide-up 1s ease forwards;
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.4rem;
-  margin-top: 0;
-  color: #b05c50;  /* warm coral brown */
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    margin-top: 0;
+    color: var(--color-heading); /* Verwendung der Variablen */
 }
 
 .payment-box {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 14px;
-  padding: 20px;
-  margin: 25px 0;
-  border: 1px solid rgba(167, 211, 243, 0.4);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: relative;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 25px 0;
+    border: 1px solid rgba(167, 211, 243, 0.4);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .copy-btn {
-  margin-top: 5px;
-  cursor: pointer;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 22px;
-  font-weight: 500;
-  color: #fff;
-
-  background: linear-gradient(45deg, #A7D3F3, #F7B6A8);
-
-  transition: transform .2s, box-shadow .2s;
+    margin-top: 5px;
+    cursor: pointer;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 22px;
+    font-weight: 500;
+    color: #fff;
+    background: linear-gradient(45deg, var(--color-primary-accent), var(--color-secondary-accent));
+    /* Optimiert: Nur transform wird für Performance animiert */
+    transition: transform .2s ease;
 }
 
 .copy-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12); /* Schatten wird bei Hover hinzugefügt */
 }
 
+/* Verbessert: copy-feedback ist jetzt ein div (Live Region) */
 .copy-feedback {
-  display: none;
-  position: absolute;
-  right: 10px;
-  top: -25px;
-  background: #A7D3F3;
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
+    display: none;
+    position: absolute;
+    top: -25px;
+    right: 10px;
+    background: var(--color-primary-accent);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    pointer-events: none; /* Stellt sicher, dass es keine Klick-Events blockiert */
 }
 
 .thanks {
-  font-style: italic;
-  color: #b05c50;
+    font-style: italic;
+    color: var(--color-heading);
 }
 
+/* Herz Animation */
 .heart {
-  position: fixed;
-  width: 15px;
-  height: 15px;
-  background: #F7B6A8;
-  transform: rotate(45deg);
-  z-index: 9999;
-  pointer-events: none;
-  animation-name: floatUp;
-  animation-timing-function: ease-out;
+    position: fixed;
+    width: 15px;
+    height: 15px;
+    background: var(--color-secondary-accent);
+    transform: rotate(45deg);
+    z-index: 9999;
+    pointer-events: none;
+    animation: floatUp 1s forwards;
 }
 
 .heart::before, .heart::after {
-  content: '';
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background: #F7B6A8;
-  border-radius: 50%;
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: var(--color-secondary-accent);
+    border-radius: 50%;
 }
 
 .heart::before { top: -7.5px; left: 0; }
-.heart::after  { top: 0; left: -7.5px; }
+.heart::after  { top: 0; left: -7.5px; }
 
 @keyframes floatUp {
-  0%   { transform: translate(0,0) rotate(45deg); opacity: 1; }
-  100% { transform: translate(var(--x), var(--y)) rotate(45deg); opacity: 0; }
+    0%   { transform: translate(0,0) rotate(45deg); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) rotate(45deg); opacity: 0; }
 }
 
+/* Responsive */
 @media (max-width: 768px) {
-  .card {
-    margin: 40px 18px;
-    padding: 32px 26px;
-  }
-
-  h1 { font-size: 2rem; }
+    .card { margin: 40px 18px; padding: 32px 26px; }
+    h1 { font-size: 2rem; }
 }
 
 @media (max-width: 480px) {
-  .card {
-    margin: 28px 15px;
-    padding: 26px 20px;
-  }
+    .card { margin: 28px 15px; padding: 26px 20px; }
+    h1 { font-size: 1.7rem; }
+}
 
-  h1 { font-size: 1.7rem; }
+/* Flappy Lovebird */
+#flappy-wrapper {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 2000;
+    background: rgba(0,0,0,0.6);
+}
+
+#flappy-canvas {
+    border: 3px solid #D85A6A;
+    border-radius: 12px;
+    background: linear-gradient(to bottom, #87CEFA, #E0FFFF);
+}
+
+#flappy-score {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+#flappy-message {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.1rem;
+    color: #fff;
+    background: rgba(216,90,106,0.7);
+    padding: 8px 15px;
+    border-radius: 10px;
+}
+
+#flappy-restart {
+    padding: 10px 20px;
+    border: none;
+    background: #D85A6A;
+    color: #fff;
+    border-radius: 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+#flappy-restart:hover {
+    background: #ff7f91;
 }

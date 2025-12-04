@@ -1,54 +1,63 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hochzeit – Zimmerreservierung</title>
-  <link rel="stylesheet" href="styles.css?v=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hochzeit – Zimmerreservierung</title>
+    <meta name="description" content="Informationen zur Zimmerreservierung für unsere Hochzeitsgäste und Zahlungsdetails.">
+    
+    <link rel="stylesheet" href="styles.css?v=1.4">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="bg-image"></div>
-  <div class="overlay"></div>
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
 
-  <main class="card fade-in">
-    <h1 id="greeting">Liebe Hochzeitsgäste, 😊</h1>
-	
-    <p>
-		leider gab es bei dem QR Code auf den Einladungskarten einen technischen Fehler.
-		Damit wir gemeinsam bis in die frühen Morgenstunden ausgelassen feiern und tanzen können, haben wir für dich/euch ein Zimmer direkt in unserer wunderschönen Location gebucht. 
-		Du/Ihr musst/müsst dir/euch keine Sorgen um den Heimweg machen, sondern du/ihr kannst/könnt nach der Party direkt ins Bett fallen. 
-	</p>
-	<p>	
-		Die Kosten für dieses Rundum-sorglos-Paket betragen <strong>115 € pro Person</strong>.
-		Darin enthalten ist die Übernachtung sowie ein herrliches gemeinsames Frühstück am nächsten Morgen! 
-		Für unsere Gäste unter 7 Jahren ist die Übernachtung selbstverständlich kostenfrei.
-	</p>	
-	<p>
-		Wir bitten dich/euch den Betrag für dein/euer Zimmer auf das folgende Konto zu überweisen: 
+    <main id="content" class="card fade-in">
+        <h1 id="wedding-title">Liebe Hochzeitsgäste, 😊</h1>
+    
+        <p>
+            leider gab es bei dem QR Code auf den Einladungskarten einen technischen Fehler.
+            ​Damit wir gemeinsam bis in die frühen Morgenstunden ausgelassen feiern und tanzen können, haben wir für dich/euch ein Zimmer direkt in unserer wunderschönen Location gebucht. 
+            Du/Ihr musst/müsst dir/euch keine Sorgen um den Heimweg machen, sondern du/ihr kannst/könnt nach der Party direkt ins Bett fallen.   
+        </p>
+        <p> 
+            Die Kosten für dieses Rundum-sorglos-Paket betragen <strong>115 € pro Person</strong>.
+            Darin enthalten ist die Übernachtung sowie ein herrliches gemeinsames Frühstück am nächsten Morgen! 
+            Für unsere Gäste unter 7 Jahren ist die Übernachtung selbstverständlich <strong>kostenfrei</strong>.
+        </p>  
+        <p>
+            Wir bitten dich/euch den Betrag für dein/euer Zimmer auf das folgende Konto zu überweisen:
+        </p>
 
-    </p>
+        <div class="payment-box">
+            <div class="copy-field">
+                <p><strong>IBAN:</strong><br>
+                <span id="iban">DE76 1708 0000 0198 2400 00</span></p>
+                <button class="copy-btn" data-copy-target="iban" type="button">IBAN kopieren</button>
+            </div>
 
-    <div class="payment-box">
-      <div class="copy-field">
-        <p><strong>IBAN:</strong> <span id="iban">DE76 1708 0000 0198 2400 00</span></p>
-        <button class="copy-btn" data-copy-target="iban">IBAN kopieren</button>
-      </div>
+            <div class="copy-field">
+                <p><strong>Verwendungszweck:</strong><br>
+                <span id="purpose">Hochzeit – Zimmerreservierung</span></p>
+                <button class="copy-btn" data-copy-target="purpose" type="button">Verwendungszweck kopieren</button>
+            </div>
 
-      <div class="copy-field">
-        <p><strong>Verwendungszweck:</strong><br>
-        <span id="purpose">Hochzeit – Zimmerreservierung</span></p>
-        <button class="copy-btn" data-copy-target="purpose">Verwendungszweck kopieren</button>
-      </div>
+            <div class="copy-feedback" role="status" aria-live="polite">Kopiert!</div>
+        </div>
 
-      <span class="copy-feedback">Kopiert!</span>
+        <p class="thanks">Wir freuen uns auf Euch</p>
+        <p class="thanks">Euer Hochzeitspaar 💛</p>
+    </main>
+
+    <div id="flappy-wrapper">
+        <canvas id="flappy-canvas" width="400" height="600"></canvas>
+        <div id="flappy-score">Punkte: 0</div>
+        <div id="flappy-message">Tippe oder klicke zum Start!</div>
+        <button id="flappy-restart" type="button">Neu starten</button>
     </div>
 
-    <p class="thanks">Wir freuen uns auf dich/euch</p>
-	  <p class="thanks">Euer Hochzeitspaar 💛</p>
-  </main>
-
-  <script src="script.js?v=1.0"></script>
+    <script src="script.js?v=1.4"></script>
 </body>
 </html>
