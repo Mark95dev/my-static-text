@@ -20,9 +20,10 @@
 
         // Game-Konstanten
         const GRAVITY = 0.6;
-        const LIFT = -12;
-        const PIPE_SPEED = 3;
-        const GAP_SIZE = 180; 
+        const LIFT = -9.5;
+        // ANPASSUNG: Reduzierung der Geschwindigkeit von 3 auf 2.5 für besseres mobiles Spielgefühl
+        const PIPE_SPEED = 2.5; 
+        const GAP_SIZE = 170; 
         
         const width = canvas.width;
         const height = canvas.height;
@@ -139,34 +140,28 @@
             resetGame();
         }
         
-        // NEU: Funktion zum Schließen des Spiels
         function closeFlappyLovebird() {
-            if (!flappyActive && !gameOver) return; // Nur schließen, wenn es aktiv oder gerade vorbei ist.
+            if (!flappyActive && !gameOver) return;
             
             flappyActive = false;
-            gameOver = true; // Setzen, damit es nicht direkt wieder startet
+            gameOver = true; 
             flappyWrapper.style.display = 'none';
             flappyMessage.style.display = 'none'; 
             
-            // Stoppt die Animation
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
                 animationFrameId = null;
             }
             
-            // Führt einen Reset aus, um den Zustand für das nächste Mal zu bereinigen
             resetGame(); 
         }
 
-        // NEU: Event-Listener für das Schließen
         flappyWrapper.addEventListener('click', function(e) {
-            // Schließt nur, wenn auf den Hintergrund und nicht auf Canvas oder Buttons geklickt wird
             if (e.target === flappyWrapper) {
                 closeFlappyLovebird();
             }
         });
 
-        // NEU: Event-Listener für Escape-Taste (Desktop)
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && flappyActive) {
                 closeFlappyLovebird();
@@ -181,7 +176,7 @@
         function resetGame() {
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
-                animationFrameId = null; // Stellt sicher, dass es neu gesetzt wird
+                animationFrameId = null;
             }
             
             bird.y = height / 2;
@@ -197,7 +192,6 @@
             flappyMessage.textContent = 'Tippe oder klicke zum Start!';
             flappyMessage.style.display = 'block'; 
             
-            // Nur starten, wenn das Overlay sichtbar ist (nach dem StartPressTimer)
             if(flappyWrapper.style.display === 'flex') {
                  flappyActive = true;
                  update(); 
