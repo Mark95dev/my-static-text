@@ -19,7 +19,7 @@
         const restartBtn = document.getElementById('flappy-restart');
 
         // Game-Konstanten
-        const GRAVITY = 4;
+        const GRAVITY = 0;
         const LIFT = 10;
         // ANPASSUNG: Reduzierung der Geschwindigkeit von 3 auf 2.5 für besseres mobiles Spielgefühl
         const PIPE_SPEED = 2.5; 
