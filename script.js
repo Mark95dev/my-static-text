@@ -9,7 +9,7 @@
         let flappyActive = false;
         let pressTimer = null;
         let animationFrameId = null;
-        
+                
         // NEU: Zeit-Tracking-Variable für Delta Time
         let lastTime = 0; 
 
