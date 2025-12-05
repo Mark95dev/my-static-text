@@ -22,8 +22,8 @@
         const restartBtn = document.getElementById('flappy-restart');
 
         // Game-Konstanten - ANGEPASST FÜR ZEIT-BASIERTE STEUERUNG (Werte pro Sekunde)
-        const GRAVITY_PER_SECOND = 18; // Stärkere Schwerkraft, da sie mit dt multipliziert wird
-        const LIFT_PER_SECOND = -400;  // Starker Auftrieb
+        const GRAVITY_PER_SECOND = 900; // Stärkere Schwerkraft, da sie mit dt multipliziert wird
+        const LIFT_PER_SECOND = -480;  // Starker Auftrieb
         const PIPE_SPEED_PER_SECOND = 150; // Bewegung in Pixel pro Sekunde (ca. 2.5 * 60)
         const GAP_SIZE = 170; 
         
