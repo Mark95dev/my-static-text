@@ -2,16 +2,26 @@
 (function() {
     'use strict';
 
+    // --- Highscore-Schlüssel ---
+    const HIGHSCORE_KEY = 'flappyLovebirdHighScore';
+
     document.addEventListener('DOMContentLoaded', function () {
 
         // ... [Globale Variablen] ...
         
         let flappyActive = false;
-        let pressTimer = null;
         let animationFrameId = null;
-                
-        // NEU: Zeit-Tracking-Variable für Delta Time
         let lastTime = 0; 
+
+        let ibanCopied = false;
+        let purposeCopied = false;
+        
+        // NEU: Highscore-Variable, geladen aus localStorage
+        let highScore = parseInt(localStorage.getItem(HIGHSCORE_KEY) || 0, 10);
+        // NEU: Array zum Speichern der aktiven Konfetti-Partikel
+        let confetti = [];
+        // NEU: Letzter Punkt, bei dem Konfetti ausgelöst wurde
+        let lastConfettiScore = 0; 
 
         const title = document.getElementById('wedding-title');
         const flappyWrapper = document.getElementById('flappy-wrapper');
@@ -20,11 +30,10 @@
         const flappyScore = document.getElementById('flappy-score');
         const flappyMessage = document.getElementById('flappy-message'); 
         const restartBtn = document.getElementById('flappy-restart');
-
-        // Game-Konstanten - ANGEPASST FÜR ZEIT-BASIERTE STEUERUNG (Werte pro Sekunde)
-        const GRAVITY_PER_SECOND = 1000; // Stärkere Schwerkraft, da sie mit dt multipliziert wird
-        const LIFT_PER_SECOND = -400;  // Starker Auftrieb
-        const PIPE_SPEED_PER_SECOND = 150; // Bewegung in Pixel pro Sekunde (ca. 2.5 * 60)
+        
+        const GRAVITY_PER_SECOND = 800; 
+        const LIFT_PER_SECOND = -450;  
+        const PIPE_SPEED_PER_SECOND = 150; 
         const GAP_SIZE = 170; 
         
         const width = canvas.width;
@@ -42,10 +51,66 @@
 
         const HEART_SPREAD_X = 80;
         const HEART_SPREAD_Y = 120;
-
+        
+        // Initialer Score-Text (zeigt Highscore an)
+        updateScoreDisplay(); 
 
         /* ============================================================
-         * 1) ❤️ Herz-Klick-Animation
+         * 0) 🎊 Konfetti-Logik
+         * ============================================================ */
+
+        // Hilfsfunktion für zufällige Farbe (Pastell-Hochzeitsfarben)
+        function getRandomColor() {
+            const colors = ["#FFB6C1", "#ADD8E6", "#90EE90", "#F08080", "#FFDAB9", "#F0E68C"]; // Light Pink, Light Blue, Light Green, Coral, Peach, Light Yellow
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Konfetti-Partikel Klasse
+        class Confetti {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 6 + 2;
+                this.color = getRandomColor();
+                // Zufällige Startgeschwindigkeit für einen "Explosions"-Effekt
+                this.velX = Math.random() * 600 - 300; 
+                this.velY = Math.random() * -600 - 100; 
+                this.lifetime = 1.5; // Konfetti lebt 1.5 Sekunden
+            }
+
+            update(dt) {
+                // Konfetti verlangsamt sich in X-Richtung, fällt in Y-Richtung
+                this.velX *= (1 - 0.5 * dt); // Leichter Luftwiderstand
+                this.velY += GRAVITY_PER_SECOND * dt * 0.5; // Schwerkraft
+                this.x += this.velX * dt;
+                this.y += this.velY * dt;
+                this.lifetime -= dt;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+            }
+        }
+
+        function createConfettiBurst(x, y) {
+            const numParticles = 40;
+            for (let i = 0; i < numParticles; i++) {
+                confetti.push(new Confetti(x, y));
+            }
+        }
+        
+        function updateConfetti(safeDeltaTime) {
+            // Partikel aktualisieren und tote Partikel entfernen
+            confetti = confetti.filter(p => {
+                p.update(safeDeltaTime);
+                p.draw();
+                return p.lifetime > 0;
+            });
+        }
+        
+        /* ============================================================
+         * 1) ❤️ Herz-Klick-Animation (unverändert)
          * ============================================================ */
         document.body.addEventListener('click', function (e) {
             if (flappyActive) return;
@@ -70,68 +135,70 @@
         });
 
         /* ============================================================
-         * 2) ✏️ Copy-to-Clipboard mit Fehlerbehandlung
+         * 2) ✏️ Copy-to-Clipboard & Easter Egg Check (unverändert)
          * ============================================================ */
+        function copyText(btn) {
+            const target = document.getElementById(btn.dataset.copyTarget);
+            const feedback = btn.closest('.payment-box').querySelector('.copy-feedback');
+            
+            navigator.clipboard.writeText(target.textContent.trim())
+                .then(() => {
+                    feedback.style.display = 'inline';
+                    setTimeout(() => feedback.style.display = 'none', 1000);
+
+                    if (btn.dataset.copyTarget === 'iban') {
+                        ibanCopied = true;
+                    } else if (btn.dataset.copyTarget === 'purpose') {
+                        purposeCopied = true;
+                    }
+                    checkForEasterEgg();
+
+                })
+                .catch(err => {
+                    console.error('Kopieren fehlgeschlagen: ', err);
+                    feedback.textContent = 'Fehler beim Kopieren!';
+                    feedback.style.background = '#D85A6A';
+                    feedback.style.display = 'inline';
+                    setTimeout(() => {
+                        feedback.style.display = 'none';
+                        feedback.textContent = 'Kopiert!'; 
+                        feedback.style.background = '#A7D3F3'; 
+                    }, 2000);
+                });
+        }
+
         const copyBtns = document.querySelectorAll('.copy-btn');
         copyBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const target = document.getElementById(btn.dataset.copyTarget);
-                const feedback = btn.closest('.payment-box').querySelector('.copy-feedback');
-                
-                navigator.clipboard.writeText(target.textContent.trim())
-                    .then(() => {
-                        feedback.style.display = 'inline';
-                        setTimeout(() => feedback.style.display = 'none', 1000);
-                    })
-                    .catch(err => {
-                        console.error('Kopieren fehlgeschlagen: ', err);
-                        feedback.textContent = 'Fehler beim Kopieren!';
-                        feedback.style.background = '#D85A6A';
-                        feedback.style.display = 'inline';
-                        setTimeout(() => {
-                            feedback.style.display = 'none';
-                            feedback.textContent = 'Kopiert!'; 
-                            feedback.style.background = '#A7D3F3'; 
-                        }, 2000);
-                    });
-            });
+            btn.addEventListener('click', () => copyText(btn));
         });
 
+
         /* ============================================================
-         * 3) Flappy Lovebird Easter Egg nach 2 Sekunden Halten
+         * 3) Flappy Lovebird Easter Egg: Trigger-Logik über Kopieren (unverändert)
          * ============================================================ */
-        function startPressTimer() { 
-            if (pressTimer === null) {
-                pressTimer = setTimeout(startFlappyLovebird, 2000); 
+        function checkForEasterEgg() {
+            if (ibanCopied && purposeCopied && !flappyActive) {
+                setTimeout(startFlappyLovebird, 500); 
             }
         }
-
-        function clearPressTimer() { 
-            if (pressTimer !== null) {
-                clearTimeout(pressTimer);
-                pressTimer = null;
-            }
+        
+        /* ============================================================
+         * 4) Score & Highscore Anzeige
+         * ============================================================ */
+        function updateScoreDisplay() {
+            // Anzeige von aktuellem Score und Highscore
+            flappyScore.innerHTML = `Punkte: ${score} | Highscore: ${highScore}`;
         }
-
-        // Event-Listener für den Titel
-        title.addEventListener('mousedown', startPressTimer);
-        title.addEventListener('touchstart', startPressTimer);
-        title.addEventListener('mouseup', clearPressTimer);
-        title.addEventListener('mouseleave', clearPressTimer);
-        title.addEventListener('touchend', clearPressTimer);
-        title.addEventListener('touchcancel', clearPressTimer);
 
 
         /* ============================================================
-         * 4) Flappy Lovebird Game mit "Summer Vibes"
+         * 5) Flappy Lovebird Game
          * ============================================================ */
         function startFlappyLovebird() {
             if (flappyActive) return;
-            clearPressTimer(); 
 
             flappyActive = true;
             flappyWrapper.style.display = 'flex';
-            flappyScore.textContent = 'Punkte: 0';
             
             canvas.removeEventListener('click', flap);
             canvas.removeEventListener('touchstart', flap);
@@ -140,7 +207,6 @@
             restartBtn.removeEventListener('click', resetGame);
             restartBtn.addEventListener('click', resetGame);
             
-            // Setze lastTime beim Start, um einen großen dt-Sprung zu vermeiden
             lastTime = performance.now(); 
 
             resetGame();
@@ -165,12 +231,16 @@
         flappyWrapper.addEventListener('click', function(e) {
             if (e.target === flappyWrapper) {
                 closeFlappyLovebird();
+                ibanCopied = false;
+                purposeCopied = false;
             }
         });
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && flappyActive) {
                 closeFlappyLovebird();
+                ibanCopied = false;
+                purposeCopied = false;
             }
         });
 
@@ -185,22 +255,28 @@
                 animationFrameId = null;
             }
             
+            // Highscore laden, falls ein neuer Spielstart erfolgt
+            highScore = parseInt(localStorage.getItem(HIGHSCORE_KEY) || 0, 10);
+            
             bird.y = height / 2;
             bird.vel = 0;
             obstacle.x = width;
             obstacle.swing = 0;
             obstacle.hTop = generateRandomHeight(); 
             score = 0;
+            lastConfettiScore = 0; // Setze den Konfetti-Zähler zurück
             gameOver = false;
             started = false;
+            confetti = []; // Lösche altes Konfetti
             
-            flappyScore.textContent = 'Punkte: 0';
+            updateScoreDisplay(); // Initialen Score anzeigen
             flappyMessage.textContent = 'Tippe oder klicke zum Start!';
             flappyMessage.style.display = 'block'; 
             
             if(flappyWrapper.style.display === 'flex') {
                  flappyActive = true;
-                 update(performance.now()); // Erster Aufruf mit Zeit
+                 lastTime = performance.now(); 
+                 update(lastTime); 
             }
         }
 
@@ -209,14 +285,12 @@
                 started = true;
                 flappyMessage.style.display = 'none'; 
             }
-            // Der Auftrieb wird hier direkt gesetzt, da es ein sofortiger Impuls ist
             if (!gameOver) bird.vel = bird.lift;
         }
 
+        // --- Zeichnen Funktionen (unverändert) ---
         function drawBird() {
-            // Summer Lovebird (Koralle/Gold/Grün)
-            
-            // Flügel-Offset bleibt frame-basiert, da es rein visuell ist
+            // Flügel-Offset bleibt visuell und von Date.now() abhängig
             const wingOffset = Math.sin(Date.now() / 100) * 8;
             const cx = bird.x + bird.w / 2;
             const cy = bird.y + bird.h / 2;
@@ -258,23 +332,18 @@
         }
 
         function drawObstacle() {
-            // Schwung bleibt visuell und nicht von dt abhängig
             obstacle.swing = Math.sin(Date.now() / 200) * 5;
             const x = obstacle.x;
             const w = obstacle.w;
-            
-            // --- Oberes Hindernis (Umgekehrter Blumenbogen) ---
             const hTop = obstacle.hTop + obstacle.swing;
+            const hBottomStart = obstacle.hTop + GAP_SIZE + obstacle.swing;
+            const hBottom = height - hBottomStart;
             
-            // Bogen-Struktur (dunkles Holz)
-            ctx.fillStyle = "#8B4513"; // Saddle Brown
+            // Oberes Hindernis
+            ctx.fillStyle = "#8B4513"; 
             ctx.fillRect(x, 0, w, hTop);
-            
-            // Tropische Girlande oben (Grün/Rot/Pink)
-            ctx.fillStyle = "#3CB371"; // Medium Sea Green (Blätter)
+            ctx.fillStyle = "#3CB371"; 
             ctx.fillRect(x, hTop - 10, w, 10);
-            
-            // Blumen-Akzente (Pink/Rot)
             ctx.fillStyle = "#FF69B4";
             ctx.beginPath();
             ctx.arc(x + 5, hTop - 5, 4, 0, Math.PI * 2);
@@ -282,39 +351,25 @@
             ctx.arc(x + w - 5, hTop - 5, 4, 0, Math.PI * 2);
             ctx.fill();
             
-            
-            // --- Unteres Hindernis (Geschenke und Sand) ---
-            const hBottomStart = obstacle.hTop + GAP_SIZE + obstacle.swing;
-            const hBottom = height - hBottomStart;
-            
-            // Sand-Basis (helles Beige)
-            ctx.fillStyle = "#F5DEB3"; // Wheat
+            // Unteres Hindernis
+            ctx.fillStyle = "#F5DEB3"; 
             ctx.fillRect(x, hBottomStart, w, hBottom);
-
-            // Geschenke (Türkis/Lachs) - stapeln
             const giftHeight = 30;
             const giftY1 = hBottomStart + hBottom - giftHeight;
             const giftY2 = giftY1 - giftHeight;
-
-            ctx.fillStyle = "#40E0D0"; // Turquoise
+            ctx.fillStyle = "#40E0D0"; 
             ctx.fillRect(x + 5, giftY1, w - 10, giftHeight);
-            
-            ctx.fillStyle = "#FA8072"; // Salmon
+            ctx.fillStyle = "#FA8072"; 
             ctx.fillRect(x + 10, giftY2, w - 20, giftHeight);
-            
-            // Goldene Schleifen
             ctx.fillStyle = "#FFD700";
             ctx.fillRect(x + w / 2 - 2, giftY2, 4, 25);
             ctx.fillRect(x + w / 2 - 20, giftY2 + 5, 40, 4);
 
         }
 
-
         function checkCollision() {
-            // Kollision mit Boden oder Decke
             if (bird.y < 0 || bird.y + bird.h > height) return true;
 
-            // Kollision mit Hindernis
             if (
                 bird.x < obstacle.x + obstacle.w && 
                 bird.x + bird.w > obstacle.x
@@ -322,40 +377,43 @@
                 const hTop = obstacle.hTop + obstacle.swing;
                 const hBottomStart = hTop + GAP_SIZE;
 
-                // Kollision mit Oberteil ODER Unterteil
                 if (
                     bird.y < hTop ||                 
                     bird.y + bird.h > hBottomStart   
                 ) return true;
             }
-
             return false;
         }
 
-        // NEU: update Funktion akzeptiert jetzt `time` (vom Browser bereitgestellt)
+        // update Funktion verwendet Delta Time für stabile Physik
         function update(time) {
-            // 1. Delta Time Berechnung
-            // dt ist die seit dem letzten Frame vergangene Zeit in Sekunden
+            
             const deltaTime = (time - lastTime) / 1000; 
+            const safeDeltaTime = Math.min(deltaTime, 0.1); 
             lastTime = time;
             
             ctx.clearRect(0, 0, width, height); 
+            
+            // Konfetti zuerst updaten und zeichnen, damit es unter den Spielelementen liegt
+            updateConfetti(safeDeltaTime);
 
             if (started && !gameOver) {
                 
-                // 2. Physik-Berechnung mit Delta Time
-                // Beschleunigung (Gravity) * Zeit
-                bird.vel += bird.gravity * deltaTime; 
-                // Position (Velocity) * Zeit
-                bird.y += bird.vel * deltaTime; 
+                bird.vel += bird.gravity * safeDeltaTime; 
+                bird.y += bird.vel * safeDeltaTime; 
 
-                // 3. Hindernis-Bewegung mit Delta Time
-                obstacle.x -= PIPE_SPEED_PER_SECOND * deltaTime;
+                obstacle.x -= PIPE_SPEED_PER_SECOND * safeDeltaTime;
                 
                 if (obstacle.x + obstacle.w < 0) {
                     obstacle.x = width;
                     score++;
-                    flappyScore.textContent = `Punkte: ${score}`;
+                    updateScoreDisplay(); // Score-Anzeige aktualisieren
+                    
+                    // NEU: Konfetti-Check bei jedem 5. Punkt
+                    if (score % 5 === 0 && score > lastConfettiScore) {
+                        createConfettiBurst(width / 2, height / 2); // Konfetti in der Mitte auslösen
+                        lastConfettiScore = score;
+                    }
                     
                     obstacle.hTop = generateRandomHeight(); 
                 }
@@ -366,6 +424,14 @@
                     flappyMessage.style.display = 'block'; 
                     flappyActive = false;
                     
+                    // NEU: Highscore speichern
+                    if (score > highScore) {
+                        highScore = score;
+                        localStorage.setItem(HIGHSCORE_KEY, highScore);
+                        flappyMessage.textContent = `Neuer Highscore! ${score} Punkte!`;
+                    }
+                    updateScoreDisplay(); 
+                    
                     cancelAnimationFrame(animationFrameId); 
                     return; 
                 }
@@ -373,8 +439,10 @@
             
             drawObstacle();
             drawBird();
+            
+            // Konfetti über allen Spielelementen zeichnen, falls gewünscht
+            // Hier bleibt es darunter (gezeichnet am Anfang von updateConfetti)
 
-            // rekursiver Aufruf der update Funktion mit der aktuellen Zeit
             animationFrameId = requestAnimationFrame(update); 
         }
     });
