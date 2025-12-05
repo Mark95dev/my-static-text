@@ -9,6 +9,9 @@
         let flappyActive = false;
         let pressTimer = null;
         let animationFrameId = null;
+        
+        // NEU: Zeit-Tracking-Variable für Delta Time
+        let lastTime = 0; 
 
         const title = document.getElementById('wedding-title');
         const flappyWrapper = document.getElementById('flappy-wrapper');
@@ -18,16 +21,10 @@
         const flappyMessage = document.getElementById('flappy-message'); 
         const restartBtn = document.getElementById('flappy-restart');
 
-        // Game-Konstanten
-<<<<<<< HEAD
-        const GRAVITY = 0.6;
-        const LIFT = -12;
-=======
-        const GRAVITY = 0;
-        const LIFT = -10;
->>>>>>> a1567fbe4038b0adf4a911da81b98df1d3df1edb
-        // ANPASSUNG: Reduzierung der Geschwindigkeit von 3 auf 2.5 für besseres mobiles Spielgefühl
-        const PIPE_SPEED = 2.5; 
+        // Game-Konstanten - ANGEPASST FÜR ZEIT-BASIERTE STEUERUNG (Werte pro Sekunde)
+        const GRAVITY_PER_SECOND = 18; // Stärkere Schwerkraft, da sie mit dt multipliziert wird
+        const LIFT_PER_SECOND = -400;  // Starker Auftrieb
+        const PIPE_SPEED_PER_SECOND = 150; // Bewegung in Pixel pro Sekunde (ca. 2.5 * 60)
         const GAP_SIZE = 170; 
         
         const width = canvas.width;
@@ -37,7 +34,7 @@
 
 
         // Game-State
-        let bird = { x: 80, y: height / 2, w: 34, h: 24, vel: 0, gravity: GRAVITY, lift: LIFT };
+        let bird = { x: 80, y: height / 2, w: 34, h: 24, vel: 0, gravity: GRAVITY_PER_SECOND, lift: LIFT_PER_SECOND };
         let obstacle = { x: width, w: 60, hTop: height / 2, swing: 0 }; 
         let score = 0;
         let gameOver = false;
@@ -116,6 +113,7 @@
             }
         }
 
+        // Event-Listener für den Titel
         title.addEventListener('mousedown', startPressTimer);
         title.addEventListener('touchstart', startPressTimer);
         title.addEventListener('mouseup', clearPressTimer);
@@ -141,6 +139,9 @@
             canvas.addEventListener('touchstart', flap);
             restartBtn.removeEventListener('click', resetGame);
             restartBtn.addEventListener('click', resetGame);
+            
+            // Setze lastTime beim Start, um einen großen dt-Sprung zu vermeiden
+            lastTime = performance.now(); 
 
             resetGame();
         }
@@ -199,7 +200,7 @@
             
             if(flappyWrapper.style.display === 'flex') {
                  flappyActive = true;
-                 update(); 
+                 update(performance.now()); // Erster Aufruf mit Zeit
             }
         }
 
@@ -208,12 +209,14 @@
                 started = true;
                 flappyMessage.style.display = 'none'; 
             }
+            // Der Auftrieb wird hier direkt gesetzt, da es ein sofortiger Impuls ist
             if (!gameOver) bird.vel = bird.lift;
         }
 
         function drawBird() {
             // Summer Lovebird (Koralle/Gold/Grün)
             
+            // Flügel-Offset bleibt frame-basiert, da es rein visuell ist
             const wingOffset = Math.sin(Date.now() / 100) * 8;
             const cx = bird.x + bird.w / 2;
             const cy = bird.y + bird.h / 2;
@@ -255,6 +258,7 @@
         }
 
         function drawObstacle() {
+            // Schwung bleibt visuell und nicht von dt abhängig
             obstacle.swing = Math.sin(Date.now() / 200) * 5;
             const x = obstacle.x;
             const w = obstacle.w;
@@ -328,14 +332,26 @@
             return false;
         }
 
-        function update() {
+        // NEU: update Funktion akzeptiert jetzt `time` (vom Browser bereitgestellt)
+        function update(time) {
+            // 1. Delta Time Berechnung
+            // dt ist die seit dem letzten Frame vergangene Zeit in Sekunden
+            const deltaTime = (time - lastTime) / 1000; 
+            lastTime = time;
+            
             ctx.clearRect(0, 0, width, height); 
 
             if (started && !gameOver) {
-                bird.vel += bird.gravity;
-                bird.y += bird.vel;
+                
+                // 2. Physik-Berechnung mit Delta Time
+                // Beschleunigung (Gravity) * Zeit
+                bird.vel += bird.gravity * deltaTime; 
+                // Position (Velocity) * Zeit
+                bird.y += bird.vel * deltaTime; 
 
-                obstacle.x -= PIPE_SPEED;
+                // 3. Hindernis-Bewegung mit Delta Time
+                obstacle.x -= PIPE_SPEED_PER_SECOND * deltaTime;
+                
                 if (obstacle.x + obstacle.w < 0) {
                     obstacle.x = width;
                     score++;
@@ -358,6 +374,7 @@
             drawObstacle();
             drawBird();
 
+            // rekursiver Aufruf der update Funktion mit der aktuellen Zeit
             animationFrameId = requestAnimationFrame(update); 
         }
     });
