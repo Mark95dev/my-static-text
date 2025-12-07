@@ -1,6 +1,6 @@
 /* Basis */
 :root {
-    /* Verbesserte Farbdirektiven mit Variablen */
+/* Verbesserte Farbdirektiven mit Variablen */
     --color-text-dark: #111111;
     --color-primary-accent: #A7D3F3; /* Hellblau */
     --color-secondary-accent: #F7B6A8; /* Lachsrosa */
@@ -25,13 +25,13 @@ body {
     border-radius: 22px;
     border-left: 6px solid var(--color-primary-accent);
     box-shadow: 0 12px 35px rgba(0,0,0,0.15);
-    backdrop-filter: blur(8px);
+     backdrop-filter: blur(8px);
     animation: slide-up 1s ease forwards;
 }
 
 @keyframes slide-up {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
+        from { opacity: 0; transform: translateY(30px); }
+    to  { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
@@ -49,6 +49,15 @@ h1 {
     margin: 25px 0;
     border: 1px solid rgba(167, 211, 243, 0.4);
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* NEU: Basis-Style für Felder ohne Kopier-Button (Kontoinhaber) */
+.info-field {
+margin-bottom: 15px; /* Abstand wie bei copy-field */
+}
+
+.copy-field {
+    margin-bottom: 15px; 
 }
 
 .copy-btn {
@@ -113,7 +122,7 @@ h1 {
 .heart::after  { top: 0; left: -7.5px; }
 
 @keyframes floatUp {
-    0%   { transform: translate(0,0) rotate(45deg); opacity: 1; }
+    0%   { transform: translate(0,0) rotate(45deg); opacity: 1; }
     100% { transform: translate(var(--x), var(--y)) rotate(45deg); opacity: 0; }
 }
 
